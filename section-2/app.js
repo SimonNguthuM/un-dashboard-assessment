@@ -13,6 +13,8 @@ const departmentFilter = document.getElementById("departmentFilter")
 
 const fetchTimeEl = document.getElementById("fetchTime")
 
+const searchInput = document.getElementById("searchInput")
+
 // function to generate a random number between two give numbers
 const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min)
 
@@ -78,6 +80,7 @@ function renderTable (data) {
             <tr>
                 <td>${emp.id}</td>
                 <td>${emp.name}</td>
+                <td>${emp.email}</td>
                 <td>${emp.department}</td>
                 <td>${emp.status}</td>
                 <td>${emp.joinDate}</td>
@@ -112,6 +115,7 @@ function updateSummaryCards (data){
 }
 
 function filterTable() {
+    // Status and Department filter
     const selectedStatus = statusFilter.value
     const selectedDepartment = departmentFilter.value
 
@@ -125,10 +129,21 @@ function filterTable() {
         filteredData = filteredData.filter(emp => emp.department === selectedDepartment)
     }
 
+    // filter using searchbar
+    const query = searchInput.value.toLowerCase()
+    if (query.trim() !== ""){
+        filteredData = filteredData.filter(emp => 
+            emp.name.toLowerCase().includes(query) ||
+            emp.email.toLowerCase().includes(query) ||
+            emp.department.toLowerCase().includes(query)
+        )
+    }
+
     renderTable(filteredData)
 }
 
 statusFilter.addEventListener("change", filterTable)
 departmentFilter.addEventListener("change", filterTable)
+searchInput.addEventListener("input", filterTable)
 
 fetchUserData()

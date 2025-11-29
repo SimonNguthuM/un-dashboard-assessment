@@ -47,6 +47,10 @@ aside {
     height: fit-content;
 }
 
+aside h3 {
+    margin-bottom: 1.5rem;
+}
+
 select, 
 input[type="date"] {
     padding: 0.5rem;

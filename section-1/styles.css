@@ -26,6 +26,7 @@ nav ul{
 
 nav ul li{
     cursor: pointer;
+    transition: 0.2s;
 }
 
 /**/ /*Main grid display*/ 
@@ -83,6 +84,11 @@ input[type="date"]:focus {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
   /*Table styling*/
 table {
     width: 100%;
@@ -104,6 +110,10 @@ th {
     color: white;
 }
 
+tbody tr:hover {
+    background: #f0f8ff;
+}
+
 footer {
     display: flex;
     justify-content: center;
@@ -120,6 +130,10 @@ button {
     border-radius: 8px;
     cursor: pointer;
     transition: 0.2s;
+}
+
+button:hover {
+    opacity: 0.9;
 }
 
 @media (max-width: 768px) {

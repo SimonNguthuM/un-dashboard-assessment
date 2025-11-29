@@ -8,6 +8,9 @@ const activeEmployeesEl = document.getElementById("activeEmployees")
 const avgSalaryEl = document.getElementById("avgSalary")
 const deptCountEl = document.getElementById("deptCount")
 
+const statusFilter = document.getElementById("statusFilter")
+const departmentFilter = document.getElementById("departmentFilter")
+
 // function to generate a random number between two give numbers
 const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min)
 
@@ -71,9 +74,30 @@ function updateSummaryCards (data){
     const deptCount = new Set(data.map(emp => emp.department)).size
     
     totalEmployeesEl.textContent = totalEmployees
-    activeEmployeesEl.textContent = activeEmployees;
-    avgSalaryEl.textContent = `$${avgSalary}`;
-    deptCountEl.textContent = deptCount;
+    activeEmployeesEl.textContent = activeEmployees
+    avgSalaryEl.textContent = `$${avgSalary}`
+    deptCountEl.textContent = deptCount
 }
 
 updateSummaryCards(employeeData)
+
+function filterTable() {
+    const selectedStatus = statusFilter.value
+    const selectedDepartment = departmentFilter.value
+
+    let filteredData = employeeData
+
+    if (selectedStatus !== "all") {
+        filteredData = filteredData.filter(emp => emp.status === selectedStatus)
+    }
+
+    if (selectedDepartment !== "all") {
+        filteredData = filteredData.filter(emp => emp.department === selectedDepartment)
+    }
+
+    renderTable(filteredData)
+}
+
+statusFilter.addEventListener("change", filterTable)
+departmentFilter.addEventListener("change", filterTable)
+

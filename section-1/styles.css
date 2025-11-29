@@ -121,3 +121,28 @@ button {
     cursor: pointer;
     transition: 0.2s;
 }
+
+@media (max-width: 768px) {
+    .layout {
+        grid-template-columns: 1fr;
+    }
+    aside {
+        display: none;
+    }
+    #cards{
+        flex-direction: column;
+    }
+    table {
+        display: block;
+        overflow-x: auto;
+    }
+}
+
+@media(min-width: 768px) and (max-width: 1024px) {
+    .layout {
+        grid-template-columns: 180px 1fr;
+    }
+    .card {
+        font-size: 0.9rem;
+    }
+}

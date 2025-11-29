@@ -9,11 +9,18 @@ const avgSalaryEl = document.getElementById("avgSalary")
 const deptCountEl = document.getElementById("deptCount")
 
 const statusFilter = document.getElementById("statusFilter")
-const departmentFilter = document.getElementById("departmentFilter")
 
 const fetchTimeEl = document.getElementById("fetchTime")
 
 const searchInput = document.getElementById("searchInput")
+const sortBy = document.getElementById("sortBy")
+const locationFilter = document.getElementById("locationFilter")
+
+const clearFiltersBtn = document.getElementById("clearFilters")
+const resultsCount = document.getElementById("resultsCount")
+
+const cityCanvas = document.getElementById("cityChart")
+const chartLegend = document.getElementById("chartLegend")
 
 // function to generate a random number between two give numbers
 const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min)
@@ -59,6 +66,16 @@ async function fetchUserData() {
                 salaryRange: `$${salaryMin} - $${salaryMax}`
             }
         })
+
+        const locations = [...new Set(employeeData.map(emp => emp.location))]
+
+        locationFilter.innerHTML = locations.map(loc => `
+            <label>
+                <input type="checkbox" value="${loc}" class="location-checkbox">
+                ${loc}
+            </label><br>
+        `).join("")
+
         renderTable(employeeData)
         updateSummaryCards(employeeData)  
 
@@ -115,18 +132,12 @@ function updateSummaryCards (data){
 }
 
 function filterTable() {
-    // Status and Department filter
+    // Status filter
+    let filteredData = [...employeeData]
+
     const selectedStatus = statusFilter.value
-    const selectedDepartment = departmentFilter.value
-
-    let filteredData = employeeData
-
     if (selectedStatus !== "all") {
         filteredData = filteredData.filter(emp => emp.status === selectedStatus)
-    }
-
-    if (selectedDepartment !== "all") {
-        filteredData = filteredData.filter(emp => emp.department === selectedDepartment)
     }
 
     // filter using searchbar
@@ -139,11 +150,76 @@ function filterTable() {
         )
     }
 
+    // filter using sort
+    const sortType = sortBy.value
+    if (sortType === "az") {
+        filteredData.sort((a, b) => a.name.localeCompare(b.name))
+    }
+    else if (sortType === "za") {
+        filteredData.sort((a, b) => b.name.localeCompare(a.name))
+    }
+
+    // filter using location
+    const checkedLocations = [...document.querySelectorAll(".location-checkbox:checked")].map(cb => cb.value) 
+    if (checkedLocations.length > 0) {
+        filteredData = filteredData.filter(emp => checkedLocations.includes(emp.location))
+    }
+
+    resultsCount.textContent = `${filteredData.length} results found`
+
     renderTable(filteredData)
+    const cityData = getCityData(filteredData)
+    renderCityChart(cityData)
 }
 
+function clearAllFilters() {
+    statusFilter.value = "all"
+    searchInput.value = ""
+    sortBy.value = "none"
+    document.querySelectorAll(".location-checkbox").forEach(cb => cb.checked = false)
+
+    // re-render original table
+    renderTable(employeeData);
+    updateSummaryCards(employeeData)
+}
+
+function getCityData(data) {
+    const result = {};
+    data.forEach(emp => {
+        result[emp.location] = (result[emp.location] || 0) + 1;
+    });
+    return result;
+}
+
+function renderCityChart (data) {
+    const container = document.querySelector(".chart-container")
+    container.innerHTML = ""
+
+    const vals = Object.values(data)
+    const max = vals.length ? Math.max(...vals) : 0
+
+    for (const city in data) {
+        const value = data[city]
+        const percentage = max > 0? (value / max) * 100 : 0 
+
+        const row = `
+            <div class="chart-row">
+                <span class="chart-label">${city}</span>
+                <div class="chart-bar" style="width:${percentage}%"></div>
+                <span class="chart-value">${value}</span>
+            </div>
+        `
+
+        container.innerHTML += row
+    }
+}
+
+
+// Event listeners for sidebar filters
 statusFilter.addEventListener("change", filterTable)
-departmentFilter.addEventListener("change", filterTable)
 searchInput.addEventListener("input", filterTable)
+sortBy.addEventListener("change", filterTable)
+locationFilter.addEventListener("change", filterTable)
+clearFiltersBtn.addEventListener("click", clearAllFilters);
 
 fetchUserData()

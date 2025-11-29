@@ -24,6 +24,14 @@
                 <label>Search</label>
                 <input type="text" id="searchInput" placeholder="Search: name, email, department">
             </div>
+            <div class="filter-group">
+                <label>Sort by Name</label>
+                <select id="sortBy">
+                    <option value="none">None</option>
+                    <option value="az">A → Z</option>
+                    <option value="za">Z → A</option>
+                </select>
+            </div>
             <div class = "filter-group">
                 <label>Status</label>
                 <select id="statusFilter">
@@ -33,20 +41,16 @@
                     <option value = "on leave">On Leave</option>
                 </select>
             </div>
-            <div class = "filter-group">
-                 <label>Department</label>
-                <select id="departmentFilter">
-                    <option value = "all">All</option>
-                    <option value = "Engineering">Engineering</option>
-                    <option value = "HR">HR</option>
-                    <option value = "Sales">Sales</option>
-                </select>
+            <div class="filter-group">
+                <label>Location</label>
+                <div id="locationFilter"></div>
             </div>
             <div class = "filter-group">
                 <label>Date Range</label>
                 <input type = "date">
                 <input type = "date">
             </div>
+            <button id="clearFilters">Clear Filters</button>
         </aside>
         <main>
             <section id="cards">
@@ -55,7 +59,14 @@
                 <div class="card">Average Salary: <span id="avgSalary">0</span></div>
                 <div class="card">Departments: <span id="deptCount">0</span></div>
             </section>
+            <section id="cityChartSection">
+                <h3>Users per City</h3>
+                <div class="chart-container">
+                    
+                </div>
+            </section>
             <section>
+                <p id="resultsCount">0 results found</p>
                 <table>
                     <thead>
                         <tr>

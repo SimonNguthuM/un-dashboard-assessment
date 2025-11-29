@@ -140,6 +140,39 @@ button:hover {
     opacity: 0.9;
 }
 
+#cityChartSection {
+    margin: 20px 0;
+}
+
+.chart-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chart-row {
+    display: grid;
+    grid-template-columns: 120px 1fr 50px;
+    align-items: center;
+    gap: 10px;
+}
+
+.chart-bar {
+    height: 20px;
+    background: steelblue;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.chart-label {
+    font-size: 14px;
+}
+
+.chart-value {
+    font-size: 14px;
+    font-weight: bold;
+}
+
 @media (max-width: 768px) {
     .layout {
         grid-template-columns: 1fr;

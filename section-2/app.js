@@ -11,6 +11,8 @@ const deptCountEl = document.getElementById("deptCount")
 const statusFilter = document.getElementById("statusFilter")
 const departmentFilter = document.getElementById("departmentFilter")
 
+const fetchTimeEl = document.getElementById("fetchTime")
+
 // function to generate a random number between two give numbers
 const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min)
 
@@ -24,7 +26,17 @@ function showError(message) {
     `;
 }
 
+function showLoading () {
+    tableBody.innerHTML = `
+        <tr>
+            <td colspan="8" style="text-align:center; font-style:italic;">Loading data...</td>
+        </tr>
+    `
+}
+
 async function fetchUserData() {
+    showLoading()
+    const startTime = performance.now()
     try {
         const response = await fetch ("https://jsonplaceholder.typicode.com/users")
         if(!response.ok) throw new Error ("Failed to fetch")
@@ -47,6 +59,10 @@ async function fetchUserData() {
         })
         renderTable(employeeData)
         updateSummaryCards(employeeData)  
+
+        const endTime = performance.now()
+        const duration = (endTime - startTime).toFixed(2)
+        fetchTimeEl.innerHTML = `api fetch time: ${duration}ms`
     }
     catch (error){
         showError("Failed! Please check console")

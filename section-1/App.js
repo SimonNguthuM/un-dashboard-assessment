@@ -3,6 +3,11 @@ const departments = ["Engineering", "HR", "Sales"]
 
 const tableBody = document.getElementById("tableBody")
 
+const totalEmployeesEl = document.getElementById("totalEmployees")
+const activeEmployeesEl = document.getElementById("activeEmployees")
+const avgSalaryEl = document.getElementById("avgSalary")
+const deptCountEl = document.getElementById("deptCount")
+
 // function to generate a random number between two give numbers
 const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min)
 
@@ -45,5 +50,30 @@ function renderTable (data) {
         tableBody.innerHTML += row
     })
 }
-    
+
 renderTable(employeeData.slice(0, 10))
+
+function updateSummaryCards (data){
+    const totalEmployees = data.length 
+
+    const activeEmployees = data.filter(emp => emp.status === "active").length
+
+    const avgSalary = Math.round(
+        data.reduce((sum, emp) => {
+            const [min, max] = emp.salaryRange
+                .replace(/\$/g,'')
+                .split('-')
+                .map(Number)
+            return sum + (min + max)/2
+        }, 0) / data.length
+    )
+
+    const deptCount = new Set(data.map(emp => emp.department)).size
+    
+    totalEmployeesEl.textContent = totalEmployees
+    activeEmployeesEl.textContent = activeEmployees;
+    avgSalaryEl.textContent = `$${avgSalary}`;
+    deptCountEl.textContent = deptCount;
+}
+
+updateSummaryCards(employeeData)

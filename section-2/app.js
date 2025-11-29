@@ -14,6 +14,8 @@ const departmentFilter = document.getElementById("departmentFilter")
 // function to generate a random number between two give numbers
 const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min)
 
+let employeeData = []
+
 function showError(message) {
     tableBody.innerHTML = `
         <tr>
@@ -44,6 +46,7 @@ async function fetchUserData() {
             }
         })
         renderTable(employeeData)
+        updateSummaryCards(employeeData)  
     }
     catch (error){
         showError("Failed!")
@@ -69,8 +72,6 @@ function renderTable (data) {
     })
 }
 
-renderTable(employeeData.slice(0, 10))
-
 function updateSummaryCards (data){
     const totalEmployees = data.length 
 
@@ -93,8 +94,6 @@ function updateSummaryCards (data){
     avgSalaryEl.textContent = `$${avgSalary}`
     deptCountEl.textContent = deptCount
 }
-
-updateSummaryCards(employeeData)
 
 function filterTable() {
     const selectedStatus = statusFilter.value

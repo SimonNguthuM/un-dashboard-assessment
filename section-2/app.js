@@ -49,7 +49,7 @@ async function fetchUserData() {
         updateSummaryCards(employeeData)  
     }
     catch (error){
-        showError("Failed!")
+        showError("Failed! Please check console")
         console.error(error)
     }
 }
